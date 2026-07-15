@@ -12,15 +12,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: "Prompt", sans-serif;
+    body { font-family: "Prompt", sans-serif; }
+
+    .robot-avatar {
+      width: 76px;
+      height: 76px;
+      object-fit: cover;
+      object-position: 7% center;
+      border-radius: 1.25rem;
+      border: 2px solid rgba(255,255,255,0.35);
+      box-shadow: 0 10px 24px rgba(15,23,42,0.25);
+      background: #0f172a;
     }
 
     .info-box {
       border: 1px solid rgb(226 232 240);
-      border-radius: 0.875rem;
+      border-radius: 0.9rem;
       background: #fff;
-      padding: 0.875rem;
+      padding: 0.9rem;
     }
 
     .info-label {
@@ -31,8 +40,8 @@
     }
 
     .info-value {
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 700;
       color: rgb(15 23 42);
       overflow-wrap: anywhere;
     }
@@ -40,11 +49,11 @@
     .status-pill {
       display: inline-flex;
       align-items: center;
-      min-height: 1.75rem;
+      min-height: 1.85rem;
       border-radius: 9999px;
-      padding: 0.25rem 0.625rem;
-      font-size: 0.8rem;
-      font-weight: 600;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.82rem;
+      font-weight: 700;
       background: rgb(241 245 249);
       color: rgb(71 85 105);
     }
@@ -64,70 +73,55 @@
       color: rgb(153 27 27);
     }
 
-    .ready-badge {
-      display: inline-flex;
+    .ready-strip {
+      display: flex;
       align-items: center;
-      gap: 0.35rem;
-      border-radius: 9999px;
-      padding: 0.35rem 0.75rem;
-      font-size: 0.8rem;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      border-radius: 1rem;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
       font-weight: 700;
     }
 
-    .ready-badge.ready {
+    .ready-strip.ready {
       background: rgb(209 250 229);
       color: rgb(6 95 70);
+      border: 1px solid rgb(167 243 208);
     }
 
-    .ready-badge.received {
+    .ready-strip.received {
       background: rgb(254 226 226);
       color: rgb(153 27 27);
+      border: 1px solid rgb(254 202 202);
     }
 
     .spinner {
       width: 1.15rem;
       height: 1.15rem;
-      border: 3px solid rgba(255, 255, 255, 0.45);
+      border: 3px solid rgba(255,255,255,0.45);
       border-top-color: #fff;
       border-radius: 9999px;
       animation: spin 0.75s linear infinite;
     }
 
-    .pulse-in {
-      animation: pulseIn 0.22s ease-out;
-    }
-
-    .success-pop {
-      animation: successPop 0.3s ease-out;
-    }
+    .pulse-in { animation: pulseIn 0.22s ease-out; }
+    .success-pop { animation: successPop 0.3s ease-out; }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
     @keyframes pulseIn {
-      from {
-        transform: scale(0.98);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+      from { transform: scale(0.98); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     @keyframes successPop {
-      0% {
-        transform: scale(0.7);
-        opacity: 0;
-      }
-      70% {
-        transform: scale(1.08);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -137,19 +131,15 @@
     <section class="w-full overflow-hidden rounded-3xl bg-white shadow-xl">
       <header class="bg-gradient-to-br from-blue-900 via-blue-700 to-sky-500 p-4 text-white sm:p-5">
         <div class="flex items-center gap-4">
-          <img
-            src="logo.png"
-            alt="Event logo"
-            class="h-20 w-28 flex-none rounded-xl border border-white/20 object-cover shadow-lg sm:h-24 sm:w-36"
-          >
+          <img src="logo.png" alt="Robot logo" class="robot-avatar">
 
           <div class="min-w-0">
-            <p class="text-xs font-medium text-blue-100 sm:text-sm">สำหรับเจ้าหน้าที่ประจำจุดลงทะเบียน</p>
+            <p class="text-xs font-medium text-blue-100 sm:text-sm">Training Event Operation Tool</p>
             <h1 class="mt-1 text-xl font-bold leading-tight sm:text-2xl">
-              Event Registration &amp; Shirt Check-in
+              Event Registration<br class="sm:hidden"> &amp; Shirt Check-in
             </h1>
-            <p class="mt-2 hidden text-xs leading-5 text-blue-50 sm:block sm:text-sm">
-              ค้นหา ตรวจสอบ และยืนยันรับเสื้อในขั้นตอนเดียว
+            <p class="mt-2 text-xs leading-5 text-blue-50 sm:text-sm">
+              สำหรับเจ้าหน้าที่ประจำจุดลงทะเบียน
             </p>
           </div>
         </div>
@@ -175,36 +165,29 @@
             type="submit"
             class="flex w-full items-center justify-center gap-3 rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <span id="searchSpinner" class="spinner hidden" aria-hidden="true"></span>
+            <span id="searchSpinner" class="spinner hidden"></span>
             <span id="searchButtonText">ค้นหา</span>
           </button>
         </form>
 
-        <div
-          id="statusBox"
-          class="hidden rounded-xl border px-4 py-3 text-sm leading-6"
-          role="status"
-          aria-live="polite"
-        ></div>
+        <div id="statusBox" class="hidden rounded-xl border px-4 py-3 text-sm leading-6" role="status" aria-live="polite"></div>
 
         <section id="employeeCard" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+          <div id="readyStrip" class="ready-strip ready mb-4">✓ พร้อมรับเสื้อ</div>
+
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
-              <div class="mb-2 flex flex-wrap items-center gap-2">
-                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">ข้อมูลพนักงาน</p>
-                <span id="readyBadge" class="ready-badge ready">✓ พร้อมรับเสื้อ</span>
-              </div>
-
-              <h2 id="fullName" class="text-2xl font-bold leading-tight sm:text-3xl"></h2>
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">ข้อมูลพนักงาน</p>
+              <h2 id="fullName" class="mt-1 text-3xl font-bold leading-tight sm:text-4xl"></h2>
               <p class="mt-2 text-sm text-slate-500">
                 รหัสพนักงาน:
                 <span id="employeeIdDisplay" class="font-semibold text-slate-700"></span>
               </p>
             </div>
 
-            <div class="min-w-24 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-center shadow-sm">
+            <div class="min-w-28 rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-4 text-center shadow-sm">
               <p class="text-xs font-semibold text-amber-800">ขนาดเสื้อ</p>
-              <p id="shirtSize" class="mt-1 text-5xl font-bold leading-none text-amber-950">-</p>
+              <p id="shirtSize" class="mt-1 text-6xl font-bold leading-none text-amber-950">-</p>
             </div>
           </div>
 
@@ -213,17 +196,14 @@
               <p class="info-label">ตำแหน่ง</p>
               <p id="position" class="info-value">-</p>
             </div>
-
             <div class="info-box">
               <p class="info-label">หน่วยงาน</p>
               <p id="department" class="info-value">-</p>
             </div>
-
             <div class="info-box">
               <p class="info-label">สถานะการลงทะเบียน</p>
               <p id="registrationStatus" class="status-pill">-</p>
             </div>
-
             <div class="info-box">
               <p class="info-label">สถานะการรับเสื้อ</p>
               <p id="shirtStatus" class="status-pill">-</p>
@@ -235,10 +215,54 @@
               <p class="info-label">เวลาลงทะเบียน</p>
               <p id="registeredAt" class="info-value">-</p>
             </div>
-
             <div class="info-box">
               <p class="info-label">เวลารับเสื้อ</p>
               <p id="shirtReceivedAt" class="info-value">-</p>
+            </div>
+          </div>
+
+          <div id="recipientSection" class="mt-4 rounded-2xl border border-blue-100 bg-blue-50 p-4">
+            <p class="text-sm font-semibold text-blue-950">ผู้รับเสื้อ</p>
+
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <label class="cursor-pointer rounded-xl border border-blue-200 bg-white p-3 text-center">
+                <input type="radio" name="recipientType" value="SELF" checked class="mr-1">
+                รับด้วยตนเอง
+              </label>
+
+              <label class="cursor-pointer rounded-xl border border-blue-200 bg-white p-3 text-center">
+                <input type="radio" name="recipientType" value="REPRESENTATIVE" class="mr-1">
+                มีผู้รับแทน
+              </label>
+            </div>
+
+            <div id="representativeFields" class="mt-4 hidden space-y-3">
+              <div>
+                <label for="receivedBy" class="mb-1 block text-sm font-semibold text-slate-700">
+                  ชื่อผู้รับแทน <span class="text-red-600">*</span>
+                </label>
+                <input
+                  id="receivedBy"
+                  type="text"
+                  maxlength="150"
+                  autocomplete="off"
+                  placeholder="ชื่อ–นามสกุลผู้มารับแทน"
+                  class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                >
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label for="note" class="mb-1 block text-sm font-semibold text-slate-700">
+                หมายเหตุ <span class="font-normal text-slate-500">(ไม่บังคับ)</span>
+              </label>
+              <textarea
+                id="note"
+                rows="2"
+                maxlength="500"
+                placeholder="เช่น หัวหน้างานรับแทน หรือรายละเอียดเพิ่มเติม"
+                class="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              ></textarea>
             </div>
           </div>
 
@@ -251,9 +275,9 @@
             <button
               id="confirmButton"
               type="button"
-              class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600"
+              class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-700 px-4 py-5 text-xl font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600"
             >
-              <span id="confirmSpinner" class="spinner hidden" aria-hidden="true"></span>
+              <span id="confirmSpinner" class="spinner hidden"></span>
               <span id="confirmButtonText">ยืนยันลงทะเบียนและรับเสื้อ</span>
             </button>
 
@@ -267,23 +291,24 @@
           </div>
         </section>
 
-        <section id="successCard" class="hidden rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center">
-          <div id="successIcon" class="success-pop mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600 text-4xl text-white">✓</div>
-          <h2 class="mt-4 text-2xl font-bold text-emerald-900">ดำเนินการเรียบร้อยแล้ว</h2>
-          <p id="successName" class="mt-2 text-xl font-semibold text-emerald-900"></p>
-          <p id="successShirtSize" class="mt-1 text-lg font-semibold text-emerald-800"></p>
-          <p id="successTime" class="mt-1 text-sm text-emerald-700"></p>
+        <section id="successCard" class="hidden overflow-hidden rounded-2xl border border-emerald-300 bg-emerald-600 p-6 text-center text-white shadow-lg">
+          <div class="success-pop mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-5xl text-emerald-600 shadow-md">✓</div>
+          <h2 class="mt-4 text-3xl font-bold">รับเสื้อเรียบร้อยแล้ว</h2>
+          <p id="successName" class="mt-3 text-2xl font-semibold"></p>
+          <p id="successShirtSize" class="mt-1 text-4xl font-bold"></p>
+          <p id="successRecipient" class="mt-3 text-sm text-emerald-50"></p>
+          <p id="successTime" class="mt-1 text-sm text-emerald-50"></p>
 
-          <div class="mt-4 rounded-xl bg-white/70 px-4 py-3 text-sm font-medium text-emerald-900">
+          <div class="mt-5 rounded-xl bg-white/15 px-4 py-3 text-sm font-medium">
             ระบบจะกลับไปหน้าค้นหาใน
-            <span id="countdownText" class="text-xl font-bold">3</span>
+            <span id="countdownText" class="text-2xl font-bold">3</span>
             วินาที
           </div>
 
           <button
             id="nextButton"
             type="button"
-            class="mt-4 w-full rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800"
+            class="mt-4 w-full rounded-xl bg-white px-4 py-4 text-lg font-semibold text-emerald-700 transition hover:bg-emerald-50"
           >
             ค้นหาคนถัดไปทันที
           </button>
@@ -296,6 +321,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7amt9ihheAtag_rl0nw_XK0fUI74ZmhXqqWR5OORJ2LzyakjTtQNA3WLIkuS7FS-CDQ/exec";
     const AUTO_RESET_SECONDS = 3;
     const ENABLE_VOICE = true;
+    const ENABLE_SUCCESS_BEEP = true;
 
     const elements = {
       searchForm: document.getElementById("searchForm"),
@@ -320,11 +346,16 @@
       shirtStatus: document.getElementById("shirtStatus"),
       registeredAt: document.getElementById("registeredAt"),
       shirtReceivedAt: document.getElementById("shirtReceivedAt"),
+      recipientSection: document.getElementById("recipientSection"),
+      representativeFields: document.getElementById("representativeFields"),
+      receivedBy: document.getElementById("receivedBy"),
+      note: document.getElementById("note"),
       alreadyReceivedBox: document.getElementById("alreadyReceivedBox"),
       alreadyReceivedTime: document.getElementById("alreadyReceivedTime"),
-      readyBadge: document.getElementById("readyBadge"),
+      readyStrip: document.getElementById("readyStrip"),
       successName: document.getElementById("successName"),
       successShirtSize: document.getElementById("successShirtSize"),
+      successRecipient: document.getElementById("successRecipient"),
       successTime: document.getElementById("successTime"),
       countdownText: document.getElementById("countdownText")
     };
@@ -338,15 +369,34 @@
     elements.confirmButton.addEventListener("click", handleConfirm);
     elements.resetButton.addEventListener("click", resetView);
     elements.nextButton.addEventListener("click", resetView);
+
+    document.querySelectorAll('input[name="recipientType"]').forEach(radio => {
+      radio.addEventListener("change", updateRecipientFields);
+    });
+
     window.addEventListener("load", () => elements.employeeIdInput.focus());
 
     function normalizeEmployeeId(value) {
       return String(value || "").trim().toUpperCase();
     }
 
+    function getRecipientType() {
+      return document.querySelector('input[name="recipientType"]:checked')?.value || "SELF";
+    }
+
+    function updateRecipientFields() {
+      const isRepresentative = getRecipientType() === "REPRESENTATIVE";
+      elements.representativeFields.classList.toggle("hidden", !isRepresentative);
+
+      if (isRepresentative) {
+        elements.receivedBy.focus();
+      } else {
+        elements.receivedBy.value = "";
+      }
+    }
+
     async function handleSearch(event) {
       event.preventDefault();
-
       if (isSearching || isConfirming) return;
 
       cancelAutoReset();
@@ -397,6 +447,17 @@
     async function handleConfirm() {
       if (!currentEmployee || isConfirming || isSearching) return;
 
+      const recipientType = getRecipientType();
+      const receivedBy = elements.receivedBy.value.trim();
+      const note = elements.note.value.trim();
+
+      if (recipientType === "REPRESENTATIVE" && !receivedBy) {
+        showStatus("กรุณาระบุชื่อผู้รับแทน", "error");
+        elements.receivedBy.focus();
+        speak("กรุณาระบุชื่อผู้รับแทน");
+        return;
+      }
+
       isConfirming = true;
       setConfirmLoading(true);
       showStatus("กำลังบันทึกการลงทะเบียนและรับเสื้อ...", "loading");
@@ -404,7 +465,10 @@
       try {
         const result = await callApi({
           action: "confirmCheckIn",
-          employeeId: currentEmployee.employeeId
+          employeeId: currentEmployee.employeeId,
+          recipientType,
+          receivedBy,
+          note
         });
 
         if (!result.success) {
@@ -420,6 +484,7 @@
         currentEmployee = result.employee;
         renderSuccess(currentEmployee);
         hideStatus();
+        playSuccessBeep();
         speak(`รับเสื้อขนาด ${currentEmployee.shirtSize || ""} เรียบร้อยแล้ว`);
         startAutoReset();
       } catch (error) {
@@ -441,10 +506,7 @@
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     }
 
@@ -464,10 +526,10 @@
       applyStatusStyle(elements.registrationStatus, employee.registrationStatus);
       applyStatusStyle(elements.shirtStatus, employee.shirtStatus);
 
-      elements.readyBadge.className = `ready-badge ${alreadyReceived ? "received" : "ready"}`;
-      elements.readyBadge.textContent = alreadyReceived ? "✕ รับเสื้อแล้ว" : "✓ พร้อมรับเสื้อ";
-
+      elements.readyStrip.className = `ready-strip ${alreadyReceived ? "received" : "ready"}`;
+      elements.readyStrip.textContent = alreadyReceived ? "✕ รับเสื้อแล้ว" : "✓ พร้อมรับเสื้อ";
       elements.alreadyReceivedBox.classList.toggle("hidden", !alreadyReceived);
+      elements.recipientSection.classList.toggle("hidden", alreadyReceived);
 
       setText(
         elements.alreadyReceivedTime,
@@ -492,7 +554,13 @@
       elements.successCard.classList.add("pulse-in");
 
       setText(elements.successName, `${employee.firstName || ""} ${employee.lastName || ""}`.trim());
-      setText(elements.successShirtSize, `เสื้อขนาด ${employee.shirtSize || "-"}`);
+      setText(elements.successShirtSize, `ขนาด ${employee.shirtSize || "-"}`);
+
+      const recipientText = employee.recipientType === "REPRESENTATIVE"
+        ? `ผู้รับแทน: ${employee.receivedBy || "-"}`
+        : "รับด้วยตนเอง";
+
+      setText(elements.successRecipient, recipientText);
       setText(
         elements.successTime,
         `เวลาทำรายการ: ${formatDateTime(employee.shirtReceivedAt || employee.registeredAt || new Date())}`
@@ -504,6 +572,8 @@
         NOT_FOUND: "ไม่พบรหัสพนักงาน กรุณาตรวจสอบแล้วลองอีกครั้ง",
         ALREADY_RECEIVED: "พนักงานรายนี้รับเสื้อแล้ว ไม่สามารถบันทึกซ้ำได้",
         INVALID_REQUEST: "ข้อมูลคำขอไม่ถูกต้อง กรุณาลองใหม่",
+        INVALID_RECIPIENT: "กรุณาเลือกประเภทผู้รับเสื้อ",
+        MISSING_RECEIVED_BY: "กรุณาระบุชื่อผู้รับแทน",
         MISSING_SHEET: "ระบบยังไม่พร้อมใช้งาน เนื่องจากไม่พบชีตที่จำเป็น",
         MISSING_COLUMNS: "ระบบยังไม่พร้อมใช้งาน เนื่องจากโครงสร้างข้อมูลไม่ครบ",
         LOCK_TIMEOUT: "ระบบกำลังประมวลผลรายการอื่น กรุณาลองใหม่อีกครั้ง",
@@ -577,7 +647,6 @@
 
     function startAutoReset() {
       cancelAutoReset();
-
       let seconds = AUTO_RESET_SECONDS;
       setText(elements.countdownText, seconds);
 
@@ -599,14 +668,25 @@
       }
     }
 
+    function resetRecipientForm() {
+      const selfRadio = document.querySelector('input[name="recipientType"][value="SELF"]');
+      if (selfRadio) selfRadio.checked = true;
+
+      elements.receivedBy.value = "";
+      elements.note.value = "";
+      elements.representativeFields.classList.add("hidden");
+      elements.recipientSection.classList.remove("hidden");
+    }
+
     function resetView() {
       cancelAutoReset();
-
       currentEmployee = null;
       isSearching = false;
       isConfirming = false;
 
       elements.searchForm.reset();
+      resetRecipientForm();
+
       elements.employeeIdInput.disabled = false;
       elements.searchButton.disabled = false;
       elements.searchSpinner.classList.add("hidden");
@@ -649,8 +729,35 @@
       utterance.lang = "th-TH";
       utterance.rate = 1;
       utterance.pitch = 1;
-
       window.speechSynthesis.speak(utterance);
+    }
+
+    function playSuccessBeep() {
+      if (!ENABLE_SUCCESS_BEEP) return;
+
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        const audioContext = new AudioContextClass();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(1320, audioContext.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.22);
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.24);
+      } catch (error) {
+        console.warn("Success beep unavailable", error);
+      }
     }
 
     resetView();

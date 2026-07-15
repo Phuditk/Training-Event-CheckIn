@@ -63,26 +63,96 @@
       background: rgb(254 226 226);
       color: rgb(153 27 27);
     }
+
+    .ready-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 9999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .ready-badge.ready {
+      background: rgb(209 250 229);
+      color: rgb(6 95 70);
+    }
+
+    .ready-badge.received {
+      background: rgb(254 226 226);
+      color: rgb(153 27 27);
+    }
+
+    .spinner {
+      width: 1.15rem;
+      height: 1.15rem;
+      border: 3px solid rgba(255, 255, 255, 0.45);
+      border-top-color: #fff;
+      border-radius: 9999px;
+      animation: spin 0.75s linear infinite;
+    }
+
+    .pulse-in {
+      animation: pulseIn 0.22s ease-out;
+    }
+
+    .success-pop {
+      animation: successPop 0.3s ease-out;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseIn {
+      from {
+        transform: scale(0.98);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes successPop {
+      0% {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
   </style>
 </head>
 
 <body class="min-h-screen bg-slate-100 text-slate-900">
-  <main class="mx-auto flex min-h-screen w-full max-w-xl items-center px-4 py-8">
+  <main class="mx-auto flex min-h-screen w-full max-w-xl items-start px-4 py-4 sm:items-center sm:py-8">
     <section class="w-full overflow-hidden rounded-3xl bg-white shadow-xl">
-      <header class="bg-gradient-to-br from-blue-900 via-blue-700 to-sky-500 p-5 text-white">
-        <img
-          src="logo.png"
-          alt="Event logo"
-          class="mb-5 h-auto w-full rounded-2xl border border-white/20 object-cover shadow-lg"
-        >
+      <header class="bg-gradient-to-br from-blue-900 via-blue-700 to-sky-500 p-4 text-white sm:p-5">
+        <div class="flex items-center gap-4">
+          <img
+            src="logo.png"
+            alt="Event logo"
+            class="h-20 w-28 flex-none rounded-xl border border-white/20 object-cover shadow-lg sm:h-24 sm:w-36"
+          >
 
-        <p class="text-sm font-medium text-blue-100">สำหรับเจ้าหน้าที่ประจำจุดลงทะเบียน</p>
-        <h1 class="mt-1 text-2xl font-bold leading-tight sm:text-3xl">
-          Event Registration &amp; Shirt Check-in
-        </h1>
-        <p class="mt-3 text-sm leading-6 text-blue-50 sm:text-base">
-          ค้นหาพนักงาน ตรวจสอบข้อมูล และยืนยันการลงทะเบียนพร้อมรับเสื้อในขั้นตอนเดียว
-        </p>
+          <div class="min-w-0">
+            <p class="text-xs font-medium text-blue-100 sm:text-sm">สำหรับเจ้าหน้าที่ประจำจุดลงทะเบียน</p>
+            <h1 class="mt-1 text-xl font-bold leading-tight sm:text-2xl">
+              Event Registration &amp; Shirt Check-in
+            </h1>
+            <p class="mt-2 hidden text-xs leading-5 text-blue-50 sm:block sm:text-sm">
+              ค้นหา ตรวจสอบ และยืนยันรับเสื้อในขั้นตอนเดียว
+            </p>
+          </div>
+        </div>
       </header>
 
       <div class="space-y-5 p-5 sm:p-7">
@@ -96,16 +166,17 @@
               autocomplete="off"
               autocapitalize="characters"
               placeholder="เช่น TEST001"
-              class="w-full rounded-xl border border-slate-300 px-4 py-4 text-lg font-semibold outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              class="w-full rounded-xl border border-slate-300 px-4 py-4 text-xl font-semibold uppercase outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
             >
           </div>
 
           <button
             id="searchButton"
             type="submit"
-            class="w-full rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+            class="flex w-full items-center justify-center gap-3 rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            ค้นหา
+            <span id="searchSpinner" class="spinner hidden" aria-hidden="true"></span>
+            <span id="searchButtonText">ค้นหา</span>
           </button>
         </form>
 
@@ -118,18 +189,22 @@
 
         <section id="employeeCard" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
           <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">ข้อมูลพนักงาน</p>
-              <h2 id="fullName" class="mt-1 text-xl font-bold"></h2>
-              <p class="mt-1 text-sm text-slate-500">
+            <div class="min-w-0">
+              <div class="mb-2 flex flex-wrap items-center gap-2">
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">ข้อมูลพนักงาน</p>
+                <span id="readyBadge" class="ready-badge ready">✓ พร้อมรับเสื้อ</span>
+              </div>
+
+              <h2 id="fullName" class="text-2xl font-bold leading-tight sm:text-3xl"></h2>
+              <p class="mt-2 text-sm text-slate-500">
                 รหัสพนักงาน:
                 <span id="employeeIdDisplay" class="font-semibold text-slate-700"></span>
               </p>
             </div>
 
-            <div class="min-w-20 rounded-2xl border border-amber-300 bg-amber-50 px-3 py-2 text-center">
+            <div class="min-w-24 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-center shadow-sm">
               <p class="text-xs font-semibold text-amber-800">ขนาดเสื้อ</p>
-              <p id="shirtSize" class="text-3xl font-bold text-amber-950">-</p>
+              <p id="shirtSize" class="mt-1 text-5xl font-bold leading-none text-amber-950">-</p>
             </div>
           </div>
 
@@ -176,9 +251,10 @@
             <button
               id="confirmButton"
               type="button"
-              class="w-full rounded-xl bg-emerald-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-emerald-300"
+              class="flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600"
             >
-              ยืนยันลงทะเบียนและรับเสื้อ
+              <span id="confirmSpinner" class="spinner hidden" aria-hidden="true"></span>
+              <span id="confirmButtonText">ยืนยันลงทะเบียนและรับเสื้อ</span>
             </button>
 
             <button
@@ -192,18 +268,24 @@
         </section>
 
         <section id="successCard" class="hidden rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center">
-          <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-3xl text-white">✓</div>
-          <h2 class="mt-4 text-xl font-bold text-emerald-900">ดำเนินการเรียบร้อยแล้ว</h2>
-          <p id="successName" class="mt-2 font-semibold text-emerald-900"></p>
-          <p id="successShirtSize" class="mt-1 text-emerald-800"></p>
+          <div id="successIcon" class="success-pop mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600 text-4xl text-white">✓</div>
+          <h2 class="mt-4 text-2xl font-bold text-emerald-900">ดำเนินการเรียบร้อยแล้ว</h2>
+          <p id="successName" class="mt-2 text-xl font-semibold text-emerald-900"></p>
+          <p id="successShirtSize" class="mt-1 text-lg font-semibold text-emerald-800"></p>
           <p id="successTime" class="mt-1 text-sm text-emerald-700"></p>
+
+          <div class="mt-4 rounded-xl bg-white/70 px-4 py-3 text-sm font-medium text-emerald-900">
+            ระบบจะกลับไปหน้าค้นหาใน
+            <span id="countdownText" class="text-xl font-bold">3</span>
+            วินาที
+          </div>
 
           <button
             id="nextButton"
             type="button"
-            class="mt-5 w-full rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800"
+            class="mt-4 w-full rounded-xl bg-blue-700 px-4 py-4 text-lg font-semibold text-white transition hover:bg-blue-800"
           >
-            ค้นหาคนถัดไป
+            ค้นหาคนถัดไปทันที
           </button>
         </section>
       </div>
@@ -212,15 +294,21 @@
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7amt9ihheAtag_rl0nw_XK0fUI74ZmhXqqWR5OORJ2LzyakjTtQNA3WLIkuS7FS-CDQ/exec";
+    const AUTO_RESET_SECONDS = 3;
+    const ENABLE_VOICE = true;
 
     const elements = {
       searchForm: document.getElementById("searchForm"),
       employeeIdInput: document.getElementById("employeeId"),
       searchButton: document.getElementById("searchButton"),
+      searchButtonText: document.getElementById("searchButtonText"),
+      searchSpinner: document.getElementById("searchSpinner"),
       statusBox: document.getElementById("statusBox"),
       employeeCard: document.getElementById("employeeCard"),
       successCard: document.getElementById("successCard"),
       confirmButton: document.getElementById("confirmButton"),
+      confirmButtonText: document.getElementById("confirmButtonText"),
+      confirmSpinner: document.getElementById("confirmSpinner"),
       resetButton: document.getElementById("resetButton"),
       nextButton: document.getElementById("nextButton"),
       fullName: document.getElementById("fullName"),
@@ -234,19 +322,23 @@
       shirtReceivedAt: document.getElementById("shirtReceivedAt"),
       alreadyReceivedBox: document.getElementById("alreadyReceivedBox"),
       alreadyReceivedTime: document.getElementById("alreadyReceivedTime"),
+      readyBadge: document.getElementById("readyBadge"),
       successName: document.getElementById("successName"),
       successShirtSize: document.getElementById("successShirtSize"),
-      successTime: document.getElementById("successTime")
+      successTime: document.getElementById("successTime"),
+      countdownText: document.getElementById("countdownText")
     };
 
     let currentEmployee = null;
     let isSearching = false;
     let isConfirming = false;
+    let resetTimer = null;
 
     elements.searchForm.addEventListener("submit", handleSearch);
     elements.confirmButton.addEventListener("click", handleConfirm);
     elements.resetButton.addEventListener("click", resetView);
     elements.nextButton.addEventListener("click", resetView);
+    window.addEventListener("load", () => elements.employeeIdInput.focus());
 
     function normalizeEmployeeId(value) {
       return String(value || "").trim().toUpperCase();
@@ -257,12 +349,15 @@
 
       if (isSearching || isConfirming) return;
 
+      cancelAutoReset();
+
       const employeeId = normalizeEmployeeId(elements.employeeIdInput.value);
       elements.employeeIdInput.value = employeeId;
 
       if (!employeeId) {
         showStatus("กรุณากรอกรหัสพนักงาน", "error");
         elements.employeeIdInput.focus();
+        speak("กรุณากรอกรหัสพนักงาน");
         return;
       }
 
@@ -286,9 +381,13 @@
         currentEmployee = result.employee;
         renderEmployee(currentEmployee);
         showStatus("พบข้อมูลพนักงาน กรุณาตรวจสอบก่อนยืนยัน", "success");
+        speak(currentEmployee.shirtStatus === "รับเสื้อแล้ว"
+          ? "พนักงานรับเสื้อแล้ว"
+          : "พบข้อมูลพนักงาน");
       } catch (error) {
         console.error(error);
         showStatus("ไม่สามารถเชื่อมต่อระบบได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", "error");
+        speak("ไม่สามารถเชื่อมต่อระบบได้");
       } finally {
         isSearching = false;
         setSearchLoading(false);
@@ -299,8 +398,7 @@
       if (!currentEmployee || isConfirming || isSearching) return;
 
       isConfirming = true;
-      elements.confirmButton.disabled = true;
-      elements.confirmButton.textContent = "กำลังบันทึก...";
+      setConfirmLoading(true);
       showStatus("กำลังบันทึกการลงทะเบียนและรับเสื้อ...", "loading");
 
       try {
@@ -322,16 +420,15 @@
         currentEmployee = result.employee;
         renderSuccess(currentEmployee);
         hideStatus();
+        speak(`รับเสื้อขนาด ${currentEmployee.shirtSize || ""} เรียบร้อยแล้ว`);
+        startAutoReset();
       } catch (error) {
         console.error(error);
         showStatus("ไม่สามารถเชื่อมต่อระบบได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", "error");
+        speak("ไม่สามารถเชื่อมต่อระบบได้");
       } finally {
         isConfirming = false;
-
-        if (!currentEmployee || currentEmployee.shirtStatus !== "รับเสื้อแล้ว") {
-          elements.confirmButton.disabled = false;
-          elements.confirmButton.textContent = "ยืนยันลงทะเบียนและรับเสื้อ";
-        }
+        setConfirmLoading(false);
       }
     }
 
@@ -367,6 +464,9 @@
       applyStatusStyle(elements.registrationStatus, employee.registrationStatus);
       applyStatusStyle(elements.shirtStatus, employee.shirtStatus);
 
+      elements.readyBadge.className = `ready-badge ${alreadyReceived ? "received" : "ready"}`;
+      elements.readyBadge.textContent = alreadyReceived ? "✕ รับเสื้อแล้ว" : "✓ พร้อมรับเสื้อ";
+
       elements.alreadyReceivedBox.classList.toggle("hidden", !alreadyReceived);
 
       setText(
@@ -377,17 +477,19 @@
       );
 
       elements.confirmButton.disabled = alreadyReceived;
-      elements.confirmButton.textContent = alreadyReceived
-        ? "รับเสื้อแล้ว"
+      elements.confirmButtonText.textContent = alreadyReceived
+        ? "✓ รับเสื้อแล้ว"
         : "ยืนยันลงทะเบียนและรับเสื้อ";
 
       elements.employeeCard.classList.remove("hidden");
+      elements.employeeCard.classList.add("pulse-in");
       elements.successCard.classList.add("hidden");
     }
 
     function renderSuccess(employee) {
       elements.employeeCard.classList.add("hidden");
       elements.successCard.classList.remove("hidden");
+      elements.successCard.classList.add("pulse-in");
 
       setText(elements.successName, `${employee.firstName || ""} ${employee.lastName || ""}`.trim());
       setText(elements.successShirtSize, `เสื้อขนาด ${employee.shirtSize || "-"}`);
@@ -408,7 +510,11 @@
         SERVER_ERROR: "เกิดข้อผิดพลาดภายในระบบ กรุณาติดต่อผู้ดูแล"
       };
 
-      showStatus(messages[result.code] || result.message || "เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
+      const message = messages[result.code] || result.message || "เกิดข้อผิดพลาด กรุณาลองใหม่";
+      showStatus(message, "error");
+
+      if (result.code === "NOT_FOUND") speak("ไม่พบรหัสพนักงาน");
+      if (result.code === "ALREADY_RECEIVED") speak("พนักงานรับเสื้อแล้ว");
     }
 
     function applyStatusStyle(element, value) {
@@ -426,7 +532,18 @@
     function setSearchLoading(isLoading) {
       elements.searchButton.disabled = isLoading;
       elements.employeeIdInput.disabled = isLoading;
-      elements.searchButton.textContent = isLoading ? "กำลังค้นหา..." : "ค้นหา";
+      elements.searchSpinner.classList.toggle("hidden", !isLoading);
+      elements.searchButtonText.textContent = isLoading ? "กำลังค้นหา..." : "ค้นหา";
+    }
+
+    function setConfirmLoading(isLoading) {
+      elements.confirmButton.disabled = isLoading || currentEmployee?.shirtStatus === "รับเสื้อแล้ว";
+      elements.confirmSpinner.classList.toggle("hidden", !isLoading);
+      elements.confirmButtonText.textContent = isLoading
+        ? "กำลังบันทึก..."
+        : currentEmployee?.shirtStatus === "รับเสื้อแล้ว"
+          ? "✓ รับเสื้อแล้ว"
+          : "ยืนยันลงทะเบียนและรับเสื้อ";
     }
 
     function showStatus(message, type) {
@@ -458,7 +575,33 @@
       elements.successCard.classList.add("hidden");
     }
 
+    function startAutoReset() {
+      cancelAutoReset();
+
+      let seconds = AUTO_RESET_SECONDS;
+      setText(elements.countdownText, seconds);
+
+      resetTimer = window.setInterval(() => {
+        seconds -= 1;
+        setText(elements.countdownText, seconds);
+
+        if (seconds <= 0) {
+          cancelAutoReset();
+          resetView();
+        }
+      }, 1000);
+    }
+
+    function cancelAutoReset() {
+      if (resetTimer) {
+        window.clearInterval(resetTimer);
+        resetTimer = null;
+      }
+    }
+
     function resetView() {
+      cancelAutoReset();
+
       currentEmployee = null;
       isSearching = false;
       isConfirming = false;
@@ -466,14 +609,17 @@
       elements.searchForm.reset();
       elements.employeeIdInput.disabled = false;
       elements.searchButton.disabled = false;
-      elements.searchButton.textContent = "ค้นหา";
+      elements.searchSpinner.classList.add("hidden");
+      elements.searchButtonText.textContent = "ค้นหา";
       elements.confirmButton.disabled = false;
-      elements.confirmButton.textContent = "ยืนยันลงทะเบียนและรับเสื้อ";
+      elements.confirmSpinner.classList.add("hidden");
+      elements.confirmButtonText.textContent = "ยืนยันลงทะเบียนและรับเสื้อ";
 
       hideEmployeeCard();
       hideSuccessCard();
       hideStatus();
 
+      setText(elements.countdownText, AUTO_RESET_SECONDS);
       elements.employeeIdInput.focus();
     }
 
@@ -492,6 +638,19 @@
 
     function setText(element, value) {
       element.textContent = value == null ? "" : String(value);
+    }
+
+    function speak(text) {
+      if (!ENABLE_VOICE || !("speechSynthesis" in window) || !text) return;
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "th-TH";
+      utterance.rate = 1;
+      utterance.pitch = 1;
+
+      window.speechSynthesis.speak(utterance);
     }
 
     resetView();
